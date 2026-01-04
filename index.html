@@ -41,28 +41,13 @@
       padding:18px;
     }
 
-    h1{ margin:0; font-size:26px; }
-    .sub{
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .pill{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      white-space: nowrap;
-    }
+    h1{ margin:0; font-size:28px; letter-spacing:.2px; }
 
     .grid2{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:12px;
-      margin-top:14px;
+      margin-top:16px;
       align-items:end;
     }
     .grid3{
@@ -76,7 +61,22 @@
       h1{ font-size:22px; }
     }
 
-    label{ font-size:13px; color:var(--muted); margin-bottom:6px; display:block; }
+    /* Label with icon on the RIGHT */
+    .lab{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 6px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .lab .ico{
+      font-size:14px;
+      opacity:.95;
+      transform: translateY(1px);
+      white-space: nowrap;
+    }
 
     select,input{
       width:100%;
@@ -120,11 +120,11 @@
       font-size:16px;
       font-weight:750;
       cursor:pointer;
-      min-width:160px;
+      min-width:180px;
     }
 
     .btn-now{
-      min-width:88px;
+      min-width:92px;
       border:1px solid rgba(90,255,190,.45);
       background:linear-gradient(180deg, rgba(90,255,190,.22), rgba(90,255,190,.12));
     }
@@ -135,7 +135,7 @@
 
     .out{
       margin-top:14px;
-      padding:14px;
+      padding:16px;
       border-radius:var(--radius2);
       border:1px solid var(--border);
       background:rgba(255,255,255,.04);
@@ -146,11 +146,6 @@
       font-weight:850;
       font-size:16px;
       margin:0;
-    }
-    .outHint{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13px;
     }
 
     .bands{
@@ -164,7 +159,7 @@
     }
 
     .band{
-      padding:12px;
+      padding:14px 14px;
       border-radius:14px;
       border:1px solid var(--border);
       background:rgba(255,255,255,.04);
@@ -178,7 +173,7 @@
       background: linear-gradient(180deg, rgba(125,170,255,.16), rgba(255,255,255,.03));
     }
     .k{ font-size:13px; color:var(--muted); }
-    .v{ font-size:20px; font-weight:900; }
+    .v{ font-size:22px; font-weight:900; }
   </style>
 </head>
 
@@ -186,15 +181,10 @@
 <div class="wrap">
   <div class="card">
     <h1>SnowFruit Sales Estimator</h1>
-    <div class="sub">
-      <span class="pill">🍍 Pineapple 18oz</span>
-      <span class="pill">🍉 Watermelon 18oz</span>
-      <span class="pill">🫐 Mixed Fruit w/ Berries 20oz</span>
-    </div>
 
     <div class="grid2">
       <div>
-        <label>Day type</label>
+        <div class="lab"><span>Day type</span><span class="ico">📅</span></div>
         <select id="dayType">
           <option value="weekday">Weekday (Sun–Thu)</option>
           <option value="friday">Friday</option>
@@ -203,7 +193,7 @@
       </div>
 
       <div>
-        <label>Current time</label>
+        <div class="lab"><span>Current time</span><span class="ico">🕒</span></div>
         <div style="display:flex; gap:10px;">
           <select id="timeSlot" style="flex:1;">
             <option value="0.20">10:00 AM (20%)</option>
@@ -224,9 +214,18 @@
     </div>
 
     <div class="grid3">
-      <div><label>Pineapple 18oz (P)</label><input id="p" type="number" min="0" step="1" inputmode="numeric"></div>
-      <div><label>Watermelon 18oz (W)</label><input id="w" type="number" min="0" step="1" inputmode="numeric"></div>
-      <div><label>Mixed Fruit w/ Berries 20oz (M)</label><input id="m" type="number" min="0" step="1" inputmode="numeric"></div>
+      <div>
+        <div class="lab"><span>Pineapple 18oz (P)</span><span class="ico">🍍</span></div>
+        <input id="p" type="number" min="0" step="1" inputmode="numeric">
+      </div>
+      <div>
+        <div class="lab"><span>Watermelon 18oz (W)</span><span class="ico">🍉</span></div>
+        <input id="w" type="number" min="0" step="1" inputmode="numeric">
+      </div>
+      <div>
+        <div class="lab"><span>Mixed Fruit w/ Berries 20oz (M)</span><span class="ico">🫐</span></div>
+        <input id="m" type="number" min="0" step="1" inputmode="numeric">
+      </div>
     </div>
 
     <div class="actions">
@@ -236,21 +235,18 @@
 
     <div class="out" id="out">
       <div class="outTitle">Estimated End-of-Day Sales</div>
-      <div class="outHint" id="hint"></div>
       <div class="bands" id="bands"></div>
     </div>
   </div>
 </div>
 
 <script>
-  // Day multipliers
   function ratesFor(day){
     if(day === "weekday") return { p:45, w:80 };
     if(day === "friday")  return { p:46, w:77 };
     return { p:48, w:95 }; // saturday
   }
 
-  // Mixed Fruit adjustment (M ÷ P)
   function mixAdj(P, M){
     const ratio = (P > 0) ? (M / P) : 0;
     if(ratio < 0.60) return { ratio, adj: 0.95 };
@@ -270,8 +266,8 @@
     const W = Math.max(0, parseInt(document.getElementById("w").value || "0", 10));
     const M = Math.max(0, parseInt(document.getElementById("m").value || "0", 10));
 
-    const rates = ratesFor(day);
-    const base = (P * rates.p) + (W * rates.w);
+    const r = ratesFor(day);
+    const base = (P * r.p) + (W * r.w);
 
     const mix = mixAdj(P, M);
     const adjustedSoFar = base * mix.adj;
@@ -288,23 +284,13 @@
       <div class="band"><div class="k">High</div><div class="v">${fmtMoney(high)}</div></div>
     `;
 
-    // Minimal, relevant context line only
-    const timeText = document.getElementById("timeSlot").selectedOptions[0].textContent;
-    const dayText = document.getElementById("dayType").selectedOptions[0].textContent;
-    const mode = isFinal ? "Final (no time divide)" : `Completion ${(completion*100).toFixed(0)}%`;
-    const adjText = `Mix adj ×${mix.adj} (M/P ${(mix.ratio).toFixed(2)})`;
-
-    document.getElementById("hint").textContent = `${dayText} • ${timeText} • ${mode} • ${adjText}`;
-
     document.getElementById("out").style.display = "block";
   }
 
-  // Set timeSlot to the closest checkpoint based on current local time
   function setNow(){
     const now = new Date();
     const mins = now.getHours()*60 + now.getMinutes();
 
-    // 10pm+ → Final
     if(mins >= 22*60){
       document.getElementById("timeSlot").value = "1.00";
       return;
