@@ -38,44 +38,48 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:20px;
     }
 
-    h1{ margin:0; font-size:28px; letter-spacing:.2px; }
+    h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:.2px;
+    }
 
     .grid2{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
-      margin-top:16px;
+      gap:14px;
+      margin-top:18px;
       align-items:end;
     }
+
     .grid3{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      margin-top:12px;
+      gap:14px;
+      margin-top:14px;
     }
+
     @media(max-width:780px){
       .grid2,.grid3{ grid-template-columns:1fr; }
       h1{ font-size:22px; }
     }
 
-    /* Label with icon on the RIGHT */
+    /* Label with LEFT icon */
     .lab{
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      gap:8px;
       margin:0 0 6px;
       color:var(--muted);
       font-size:13px;
     }
     .lab .ico{
       font-size:14px;
-      opacity:.95;
+      opacity:.9;
       transform: translateY(1px);
-      white-space: nowrap;
     }
 
     select,input{
@@ -101,18 +105,21 @@
 
     /* Remove number spinners */
     input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+    input[type=number]::-webkit-outer-spin-button{
+      -webkit-appearance:none;
+      margin:0;
+    }
     input[type=number]{ appearance:textfield; }
 
     .actions{
       display:flex;
-      gap:10px;
-      margin-top:14px;
+      gap:12px;
+      margin-top:18px;
       flex-wrap:wrap;
     }
 
     button{
-      padding:12px 14px;
+      padding:12px 16px;
       border-radius:14px;
       border:1px solid rgba(125,170,255,.55);
       background:linear-gradient(180deg, rgba(125,170,255,.30), rgba(125,170,255,.18));
@@ -128,14 +135,15 @@
       border:1px solid rgba(90,255,190,.45);
       background:linear-gradient(180deg, rgba(90,255,190,.22), rgba(90,255,190,.12));
     }
+
     .btn-secondary{
       border:1px solid var(--border);
       background:rgba(255,255,255,.05);
     }
 
     .out{
-      margin-top:14px;
-      padding:16px;
+      margin-top:18px;
+      padding:18px;
       border-radius:var(--radius2);
       border:1px solid var(--border);
       background:rgba(255,255,255,.04);
@@ -145,33 +153,34 @@
     .outTitle{
       font-weight:850;
       font-size:16px;
-      margin:0;
+      margin-bottom:12px;
     }
 
     .bands{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-      margin-top:12px;
+      gap:12px;
     }
+
     @media(max-width:780px){
       .bands{ grid-template-columns:1fr; }
     }
 
     .band{
-      padding:14px 14px;
+      padding:16px;
       border-radius:14px;
       border:1px solid var(--border);
       background:rgba(255,255,255,.04);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
     }
+
     .band.primary{
       border-color:rgba(125,170,255,.55);
       background: linear-gradient(180deg, rgba(125,170,255,.16), rgba(255,255,255,.03));
     }
+
     .k{ font-size:13px; color:var(--muted); }
     .v{ font-size:22px; font-weight:900; }
   </style>
@@ -184,7 +193,7 @@
 
     <div class="grid2">
       <div>
-        <div class="lab"><span>Day type</span><span class="ico">📅</span></div>
+        <div class="lab"><span class="ico">📅</span><span>Day type</span></div>
         <select id="dayType">
           <option value="weekday">Weekday (Sun–Thu)</option>
           <option value="friday">Friday</option>
@@ -193,7 +202,7 @@
       </div>
 
       <div>
-        <div class="lab"><span>Current time</span><span class="ico">🕒</span></div>
+        <div class="lab"><span class="ico">🕒</span><span>Current time</span></div>
         <div style="display:flex; gap:10px;">
           <select id="timeSlot" style="flex:1;">
             <option value="0.20">10:00 AM (20%)</option>
@@ -215,22 +224,22 @@
 
     <div class="grid3">
       <div>
-        <div class="lab"><span>Pineapple 18oz (P)</span><span class="ico">🍍</span></div>
-        <input id="p" type="number" min="0" step="1" inputmode="numeric">
+        <div class="lab"><span class="ico">🍍</span><span>Pineapple 18oz</span></div>
+        <input id="p" type="number" min="0">
       </div>
       <div>
-        <div class="lab"><span>Watermelon 18oz (W)</span><span class="ico">🍉</span></div>
-        <input id="w" type="number" min="0" step="1" inputmode="numeric">
+        <div class="lab"><span class="ico">🍉</span><span>Watermelon 18oz</span></div>
+        <input id="w" type="number" min="0">
       </div>
       <div>
-        <div class="lab"><span>Mixed Fruit w/ Berries 20oz (M)</span><span class="ico">🫐</span></div>
-        <input id="m" type="number" min="0" step="1" inputmode="numeric">
+        <div class="lab"><span class="ico">🫐</span><span>Mixed Fruit w/ Berries 20oz</span></div>
+        <input id="m" type="number" min="0">
       </div>
     </div>
 
     <div class="actions">
       <button id="calc">Calculate</button>
-      <button class="btn-secondary" id="reset" type="button">Reset</button>
+      <button class="btn-secondary" id="reset">Reset</button>
     </div>
 
     <div class="out" id="out">
@@ -244,96 +253,63 @@
   function ratesFor(day){
     if(day === "weekday") return { p:45, w:80 };
     if(day === "friday")  return { p:46, w:77 };
-    return { p:48, w:95 }; // saturday
+    return { p:48, w:95 };
   }
 
   function mixAdj(P, M){
-    const ratio = (P > 0) ? (M / P) : 0;
-    if(ratio < 0.60) return { ratio, adj: 0.95 };
-    if(ratio <= 0.85) return { ratio, adj: 1.00 };
-    return { ratio, adj: 1.08 };
+    const r = P > 0 ? M / P : 0;
+    if(r < 0.60) return 0.95;
+    if(r <= 0.85) return 1.00;
+    return 1.08;
   }
 
-  function fmtMoney(n){
+  function money(n){
     return "$" + Math.round(n).toLocaleString();
   }
 
   function calculate(){
-    const day = document.getElementById("dayType").value;
-    const completion = parseFloat(document.getElementById("timeSlot").value);
+    const day = dayType.value;
+    const completion = parseFloat(timeSlot.value);
 
-    const P = Math.max(0, parseInt(document.getElementById("p").value || "0", 10));
-    const W = Math.max(0, parseInt(document.getElementById("w").value || "0", 10));
-    const M = Math.max(0, parseInt(document.getElementById("m").value || "0", 10));
+    const P = +p.value || 0;
+    const W = +w.value || 0;
+    const M = +m.value || 0;
 
     const r = ratesFor(day);
     const base = (P * r.p) + (W * r.w);
+    const adj = mixAdj(P, M);
+    const adjusted = base * adj;
+    const final = completion >= 1 ? adjusted : adjusted / completion;
 
-    const mix = mixAdj(P, M);
-    const adjustedSoFar = base * mix.adj;
-
-    const isFinal = completion >= 1.0;
-    const normalEOD = isFinal ? adjustedSoFar : (adjustedSoFar / completion);
-
-    const low  = normalEOD * 0.92;
-    const high = normalEOD * 1.08;
-
-    document.getElementById("bands").innerHTML = `
-      <div class="band"><div class="k">Low</div><div class="v">${fmtMoney(low)}</div></div>
-      <div class="band primary"><div class="k">Normal</div><div class="v">${fmtMoney(normalEOD)}</div></div>
-      <div class="band"><div class="k">High</div><div class="v">${fmtMoney(high)}</div></div>
+    bands.innerHTML = `
+      <div class="band"><div class="k">Low</div><div class="v">${money(final * 0.92)}</div></div>
+      <div class="band primary"><div class="k">Normal</div><div class="v">${money(final)}</div></div>
+      <div class="band"><div class="k">High</div><div class="v">${money(final * 1.08)}</div></div>
     `;
-
-    document.getElementById("out").style.display = "block";
+    out.style.display = "block";
   }
 
   function setNow(){
-    const now = new Date();
-    const mins = now.getHours()*60 + now.getMinutes();
+    const mins = new Date().getHours()*60 + new Date().getMinutes();
+    if(mins >= 22*60){ timeSlot.value = "1.00"; return; }
 
-    if(mins >= 22*60){
-      document.getElementById("timeSlot").value = "1.00";
-      return;
-    }
-
-    const checkpoints = [
-      { t: 10*60, v: "0.20" },
-      { t: 11*60, v: "0.25" },
-      { t: 12*60, v: "0.30" },
-      { t: 13*60, v: "0.35" },
-      { t: 14*60, v: "0.45" },
-      { t: 15*60, v: "0.55" },
-      { t: 16*60, v: "0.65" },
-      { t: 17*60, v: "0.75" },
-      { t: 18*60, v: "0.85" },
-      { t: 19*60, v: "0.92" }
+    const slots = [
+      [600,"0.20"],[660,"0.25"],[720,"0.30"],[780,"0.35"],
+      [840,"0.45"],[900,"0.55"],[960,"0.65"],
+      [1020,"0.75"],[1080,"0.85"],[1140,"0.92"]
     ];
-
-    let chosen = checkpoints[0].v;
-    for(const c of checkpoints){
-      if(mins >= c.t) chosen = c.v;
-      else break;
-    }
-    document.getElementById("timeSlot").value = chosen;
+    let v = "0.20";
+    for(const [t,val] of slots){ if(mins >= t) v = val; }
+    timeSlot.value = v;
   }
 
-  function resetAll(){
-    document.getElementById("p").value = "";
-    document.getElementById("w").value = "";
-    document.getElementById("m").value = "";
-    document.getElementById("out").style.display = "none";
-  }
+  calc.onclick = calculate;
+  reset.onclick = () => { p.value=w.value=m.value=""; out.style.display="none"; };
+  now.onclick = setNow;
 
-  // Prevent mouse wheel from changing number inputs while scrolling
-  document.querySelectorAll('input[type="number"]').forEach(inp => {
-    inp.addEventListener('wheel', (e) => {
-      if(document.activeElement === inp) e.preventDefault();
-    }, { passive:false });
+  document.querySelectorAll('input[type="number"]').forEach(i=>{
+    i.addEventListener('wheel',e=>{ if(document.activeElement===i) e.preventDefault();},{passive:false});
   });
-
-  document.getElementById("calc").addEventListener("click", calculate);
-  document.getElementById("reset").addEventListener("click", resetAll);
-  document.getElementById("now").addEventListener("click", setNow);
 </script>
 </body>
 </html>
