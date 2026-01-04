@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3-Anchor Sales Estimator</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 16px; }
+    .card { max-width: 520px; border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
+    label { display:block; margin-top: 10px; font-weight: 600; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
+    button { margin-top: 14px; cursor: pointer; }
+    .row { display:flex; gap: 10px; }
+    .row > div { flex:1; }
+    .out { margin-top: 14px; padding: 12px; border-radius: 10px; background: #f7f7f7; }
+    .small { font-size: 13px; color: #444; }
+    .mono { font-family: ui-monospace, monospace; font-size: 13px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>3-Anchor Sales Estimator</h2>
+    <div class="small">🍍 Pineapple 18oz · 🍉 Watermelon 18oz · 🥭 Mixed Fruit w/ Berries 20oz</div>
+
+    <label>Day type</label>
+    <select id="dayType">
+      <option value="weekday">Weekday (Sun–Thu)</option>
+      <option value="friday">Friday</option>
+      <option value="saturday" selected>Saturday</option>
+    </select>
+
+    <label>Current time</label>
+    <select id="timeSlot">
+      <option value="0.20">10:00 AM (20%)</option>
+      <option value="0.25">11:00 AM (25%)</option>
+      <option value="0.30">12:00 PM (30%)</option>
+      <option value="0.35">1:00 PM (35%)</option>
+      <option value="0.45">2:00 PM (45%)</option>
+      <option value="0.55">3:00 PM (55%)</option>
+      <option value="0.65">4:00 PM (65%)</option>
+      <option value="0.75" selected>5:00 PM (75%)</option>
+      <option value="0.85">6:00 PM (85%)</option>
+      <option value="0.92">7:00 PM (92%)</option>
+      <option value="1.00">10:00 PM+ (Final)</option>
+    </select>
+
+    <div class="row">
+      <div>
+        <label>Pineapple 18oz</label>
+        <input id="p" type="number" min="0" value="0">
+      </div>
+      <div>
+        <label>Watermelon 18oz</label>
+        <input id="w" type="number" min="0" value="0">
+      </div>
+      <div>
+        <label>Mixed Fruit w/ Berries 20oz</label>
+        <input id="m" type="number" min="0" value="0">
+      </div>
+    </div>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="out" class="out" style="display:none;"></div>
+  </div>
+
+<script>
+function calculate() {
+  const day = document.getElementById("dayType").value;
+  const completion = parseFloat(document.getElementById("timeSlot").value);
+  const P = parseInt(document.getElementById("p").value || 0);
+  const W = parseInt(document.getElementById("w").value || 0);
+  const M = parseInt(document.getElementById("m").value || 0);
+
+  let pr = 48, wr = 95;
+  if (day === "weekday") { pr = 45; wr = 80; }
+  if (day === "friday") { pr = 46; wr = 77; }
+
+  const base = (P * pr) + (W * wr);
+  const ratio = P > 0 ? M / P : 0;
+  let adj = 1.0;
+  if (ratio < 0.6) adj = 0.95;
+  else if (ratio > 0.85) adj = 1.08;
+
+  const adjusted = base * adj;
+  const normal = completion >= 1 ? adjusted : adjusted / completion;
+
+  const low = Math.round(normal * 0.92);
+  const mid = Math.round(normal);
+  const high = Math.round(normal * 1.08);
+
+  document.getElementById("out").style.display = "block";
+  document.getElementById("out").innerHTML = `
+    <b>Estimated End-of-Day Sales</b><br>
+    Low: $${low}<br>
+    Normal: $${mid}<br>
+    High: $${high}<br><br>
+    <span class="small">
+      Base: $${Math.round(base)}<br>
+      Mix ratio: ${ratio.toFixed(2)} → adj ${adj}<br>
+      Completion: ${completion}
+    </span>
+  `;
+}
+</script>
+</body>
+</html>
