@@ -5,103 +5,359 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>3-Anchor Sales Estimator</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 16px; }
-    .card { max-width: 520px; border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
-    label { display:block; margin-top: 10px; font-weight: 600; }
-    input, select, button { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
-    button { margin-top: 14px; cursor: pointer; }
-    .row { display:flex; gap: 10px; }
-    .row > div { flex:1; }
-    .out { margin-top: 14px; padding: 12px; border-radius: 10px; background: #f7f7f7; }
-    .small { font-size: 13px; color: #444; }
-    .mono { font-family: ui-monospace, monospace; font-size: 13px; white-space: pre-wrap; }
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a2b;
+      --muted:#93a4c7;
+      --text:#eef3ff;
+      --border:rgba(255,255,255,.10);
+      --field:rgba(255,255,255,.06);
+      --field2:rgba(255,255,255,.08);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 10% -10%, rgba(97, 149, 255, .25), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(255, 120, 170, .18), transparent 60%),
+        radial-gradient(900px 600px at 30% 120%, rgba(90, 255, 190, .12), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      padding: 22px;
+    }
+
+    .wrap{ max-width: 720px; margin: 0 auto; }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    h1{
+      font-size: 26px;
+      line-height: 1.15;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .sub{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      white-space: nowrap;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 640px){
+      .grid2{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+      h1{ font-size: 22px; }
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+
+    select, input{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--field);
+      color: var(--text);
+      outline: none;
+      font-size: 16px;
+      transition: .12s ease;
+    }
+    input::placeholder{ color: rgba(238,243,255,.35); }
+    select:focus, input:focus{
+      border-color: rgba(125, 170, 255, .6);
+      box-shadow: 0 0 0 3px rgba(125, 170, 255, .20);
+      background: var(--field2);
+    }
+
+    .actions{
+      margin-top: 14px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button{
+      appearance:none;
+      border: 1px solid rgba(125, 170, 255, .55);
+      background: linear-gradient(180deg, rgba(125, 170, 255, .30), rgba(125, 170, 255, .18));
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor:pointer;
+      transition: .12s ease;
+      flex: 1;
+      min-width: 160px;
+    }
+    button:hover{ transform: translateY(-1px); }
+    button:active{ transform: translateY(0px); }
+
+    .btn-secondary{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      font-weight: 650;
+    }
+
+    .out{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: var(--radius2);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      display:none;
+    }
+
+    .outTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .outTitle{
+      font-weight: 800;
+      font-size: 16px;
+      margin: 0;
+    }
+    .outHint{
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .bands{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .band{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .band .k{ color: var(--muted); font-size: 12px; }
+    .band .v{ font-size: 18px; font-weight: 850; margin-top: 4px; }
+
+    .math{
+      margin-top: 12px;
+      color: rgba(238,243,255,.85);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      white-space: pre-wrap;
+      line-height: 1.35;
+      opacity: .9;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>3-Anchor Sales Estimator</h2>
-    <div class="small">🍍 Pineapple 18oz · 🍉 Watermelon 18oz · 🥭 Mixed Fruit w/ Berries 20oz</div>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div>
+          <h1>3-Anchor Sales Estimator</h1>
+          <div class="sub">
+            <span class="pill">🍍 Pineapple 18oz</span>
+            <span class="pill">🍉 Watermelon 18oz</span>
+            <span class="pill">🫐 Mixed Fruit w/ Berries 20oz</span>
+          </div>
+        </div>
+      </header>
 
-    <label>Day type</label>
-    <select id="dayType">
-      <option value="weekday">Weekday (Sun–Thu)</option>
-      <option value="friday">Friday</option>
-      <option value="saturday" selected>Saturday</option>
-    </select>
+      <div class="grid2">
+        <div>
+          <label for="dayType">Day type</label>
+          <select id="dayType">
+            <option value="weekday">Weekday (Sun–Thu)</option>
+            <option value="friday">Friday</option>
+            <option value="saturday" selected>Saturday</option>
+          </select>
+        </div>
 
-    <label>Current time</label>
-    <select id="timeSlot">
-      <option value="0.20">10:00 AM (20%)</option>
-      <option value="0.25">11:00 AM (25%)</option>
-      <option value="0.30">12:00 PM (30%)</option>
-      <option value="0.35">1:00 PM (35%)</option>
-      <option value="0.45">2:00 PM (45%)</option>
-      <option value="0.55">3:00 PM (55%)</option>
-      <option value="0.65">4:00 PM (65%)</option>
-      <option value="0.75" selected>5:00 PM (75%)</option>
-      <option value="0.85">6:00 PM (85%)</option>
-      <option value="0.92">7:00 PM (92%)</option>
-      <option value="1.00">10:00 PM+ (Final)</option>
-    </select>
-
-    <div class="row">
-      <div>
-        <label>Pineapple 18oz</label>
-        <input id="p" type="number" min="0" value="0">
+        <div>
+          <label for="timeSlot">Current time</label>
+          <select id="timeSlot">
+            <option value="0.20">10:00 AM (20% complete)</option>
+            <option value="0.25">11:00 AM (25% complete)</option>
+            <option value="0.30">12:00 PM (30% complete)</option>
+            <option value="0.35">1:00 PM (35% complete)</option>
+            <option value="0.45">2:00 PM (45% complete)</option>
+            <option value="0.55">3:00 PM (55% complete)</option>
+            <option value="0.65">4:00 PM (65% complete)</option>
+            <option value="0.75" selected>5:00 PM (75% complete)</option>
+            <option value="0.85">6:00 PM (85% complete)</option>
+            <option value="0.92">7:00 PM (92% complete)</option>
+            <option value="1.00">10:00 PM+ (Final / 100%)</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <label>Watermelon 18oz</label>
-        <input id="w" type="number" min="0" value="0">
+
+      <div class="grid3">
+        <div>
+          <label for="p">Pineapple 18oz (P)</label>
+          <input id="p" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 24" />
+        </div>
+        <div>
+          <label for="w">Watermelon 18oz (W)</label>
+          <input id="w" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 13" />
+        </div>
+        <div>
+          <label for="m">Mixed Fruit w/ Berries 20oz (M)</label>
+          <input id="m" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 7" />
+        </div>
       </div>
-      <div>
-        <label>Mixed Fruit w/ Berries 20oz</label>
-        <input id="m" type="number" min="0" value="0">
+
+      <div class="actions">
+        <button id="calc">Calculate</button>
+        <button class="btn-secondary" id="reset" type="button">Reset</button>
+      </div>
+
+      <div class="out" id="out">
+        <div class="outTop">
+          <div>
+            <div class="outTitle">Estimated End-of-Day Sales</div>
+            <div class="outHint" id="hint"></div>
+          </div>
+        </div>
+
+        <div class="bands" id="bands"></div>
+        <div class="math" id="math"></div>
       </div>
     </div>
-
-    <button onclick="calculate()">Calculate</button>
-
-    <div id="out" class="out" style="display:none;"></div>
   </div>
 
 <script>
-function calculate() {
-  const day = document.getElementById("dayType").value;
-  const completion = parseFloat(document.getElementById("timeSlot").value);
-  const P = parseInt(document.getElementById("p").value || 0);
-  const W = parseInt(document.getElementById("w").value || 0);
-  const M = parseInt(document.getElementById("m").value || 0);
+  function roundDollar(x){ return Math.round(x); }
 
-  let pr = 48, wr = 95;
-  if (day === "weekday") { pr = 45; wr = 80; }
-  if (day === "friday") { pr = 46; wr = 77; }
+  function ratesFor(day){
+    if(day === "weekday") return { p:45, w:80 };
+    if(day === "friday")  return { p:46, w:77 };
+    return { p:48, w:95 }; // saturday
+  }
 
-  const base = (P * pr) + (W * wr);
-  const ratio = P > 0 ? M / P : 0;
-  let adj = 1.0;
-  if (ratio < 0.6) adj = 0.95;
-  else if (ratio > 0.85) adj = 1.08;
+  function mixAdj(P, M){
+    const ratio = (P > 0) ? (M / P) : 0;
+    if(ratio < 0.60) return { ratio, adj: 0.95 };
+    if(ratio <= 0.85) return { ratio, adj: 1.00 };
+    return { ratio, adj: 1.08 };
+  }
 
-  const adjusted = base * adj;
-  const normal = completion >= 1 ? adjusted : adjusted / completion;
+  function fmtMoney(n){
+    return "$" + roundDollar(n).toLocaleString();
+  }
 
-  const low = Math.round(normal * 0.92);
-  const mid = Math.round(normal);
-  const high = Math.round(normal * 1.08);
+  function calculate(){
+    const day = document.getElementById("dayType").value;
+    const completion = parseFloat(document.getElementById("timeSlot").value);
 
-  document.getElementById("out").style.display = "block";
-  document.getElementById("out").innerHTML = `
-    <b>Estimated End-of-Day Sales</b><br>
-    Low: $${low}<br>
-    Normal: $${mid}<br>
-    High: $${high}<br><br>
-    <span class="small">
-      Base: $${Math.round(base)}<br>
-      Mix ratio: ${ratio.toFixed(2)} → adj ${adj}<br>
-      Completion: ${completion}
-    </span>
-  `;
-}
+    const P = Math.max(0, parseInt(document.getElementById("p").value || "0", 10));
+    const W = Math.max(0, parseInt(document.getElementById("w").value || "0", 10));
+    const M = Math.max(0, parseInt(document.getElementById("m").value || "0", 10));
+
+    const rates = ratesFor(day);
+    const base = (P * rates.p) + (W * rates.w);
+
+    const mix = mixAdj(P, M);
+    const adjustedSoFar = base * mix.adj;
+
+    const isFinal = completion >= 1.0;
+    const normalEOD = isFinal ? adjustedSoFar : (adjustedSoFar / completion);
+
+    const low  = normalEOD * 0.92;
+    const high = normalEOD * 1.08;
+
+    const bands = document.getElementById("bands");
+    bands.innerHTML = `
+      <div class="band"><div class="k">Low</div><div class="v">${fmtMoney(low)}</div></div>
+      <div class="band"><div class="k">Normal</div><div class="v">${fmtMoney(normalEOD)}</div></div>
+      <div class="band"><div class="k">High</div><div class="v">${fmtMoney(high)}</div></div>
+    `;
+
+    const hint = document.getElementById("hint");
+    hint.textContent = isFinal
+      ? `Final mode (no completion divide). Mix ratio ${(mix.ratio).toFixed(2)} → adj ×${mix.adj}`
+      : `Completion ${(completion*100).toFixed(0)}% | Mix ratio ${(mix.ratio).toFixed(2)} → adj ×${mix.adj}`;
+
+    const math = document.getElementById("math");
+    math.textContent =
+`Base = (P×${rates.p}) + (W×${rates.w})
+     = (${P}×${rates.p}) + (${W}×${rates.w})
+     = ${roundDollar(base)}
+
+Mix ratio = M÷P = ${M}÷${P || 0} = ${(mix.ratio).toFixed(4)} → adj ×${mix.adj}
+
+AdjustedSoFar = Base × adj
+              = ${roundDollar(base)} × ${mix.adj}
+              = ${adjustedSoFar.toFixed(2)}
+
+NormalEOD = ${isFinal ? "AdjustedSoFar (final)" : "AdjustedSoFar ÷ completion"}
+         = ${isFinal ? adjustedSoFar.toFixed(2) : `${adjustedSoFar.toFixed(2)} ÷ ${completion.toFixed(2)} = ${normalEOD.toFixed(2)}`}
+
+Band = Low ×0.92 | High ×1.08`;
+
+    document.getElementById("out").style.display = "block";
+  }
+
+  function resetAll(){
+    document.getElementById("p").value = "";
+    document.getElementById("w").value = "";
+    document.getElementById("m").value = "";
+    document.getElementById("out").style.display = "none";
+  }
+
+  document.getElementById("calc").addEventListener("click", calculate);
+  document.getElementById("reset").addEventListener("click", resetAll);
 </script>
 </body>
 </html>
