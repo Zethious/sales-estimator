@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>3-Anchor Sales Estimator</title>
+
   <style>
     :root{
       --bg:#0b1220;
@@ -12,10 +13,11 @@
       --text:#eef3ff;
       --border:rgba(255,255,255,.10);
       --field:rgba(255,255,255,.06);
-      --field2:rgba(255,255,255,.08);
+      --field2:rgba(255,255,255,.09);
       --shadow: 0 20px 60px rgba(0,0,0,.35);
       --radius: 18px;
       --radius2: 14px;
+      --accent: rgba(125, 170, 255, .9);
     }
 
     *{ box-sizing:border-box; }
@@ -32,7 +34,7 @@
       padding: 22px;
     }
 
-    .wrap{ max-width: 720px; margin: 0 auto; }
+    .wrap{ max-width: 820px; margin: 0 auto; }
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
       border: 1px solid var(--border);
@@ -41,13 +43,7 @@
       padding: 18px;
     }
 
-    header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
+    header{ margin-bottom: 12px; }
     h1{
       font-size: 26px;
       line-height: 1.15;
@@ -55,7 +51,7 @@
       letter-spacing: .2px;
     }
     .sub{
-      margin-top: 8px;
+      margin-top: 10px;
       color: var(--muted);
       font-size: 14px;
       display:flex;
@@ -78,6 +74,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 12px;
+      align-items: end;
     }
 
     .grid3{
@@ -87,7 +84,7 @@
       margin-top: 12px;
     }
 
-    @media (max-width: 640px){
+    @media (max-width: 720px){
       .grid2{ grid-template-columns: 1fr; }
       .grid3{ grid-template-columns: 1fr; }
       h1{ font-size: 22px; }
@@ -100,6 +97,7 @@
       margin: 0 0 6px;
     }
 
+    /* Inputs */
     select, input{
       width:100%;
       padding: 12px 12px;
@@ -111,12 +109,31 @@
       font-size: 16px;
       transition: .12s ease;
     }
-    input::placeholder{ color: rgba(238,243,255,.35); }
+
+    /* Make the *dropdown menu* readable: force light scheme for the popup list */
+    select{
+      color-scheme: light;
+      background: var(--field);
+    }
+    /* Ensure options themselves are readable (works in many browsers) */
+    select option{
+      color: #111827;         /* near-black */
+      background: #ffffff;    /* white */
+    }
+
     select:focus, input:focus{
-      border-color: rgba(125, 170, 255, .6);
-      box-shadow: 0 0 0 3px rgba(125, 170, 255, .20);
+      border-color: rgba(125, 170, 255, .65);
+      box-shadow: 0 0 0 3px rgba(125, 170, 255, .22);
       background: var(--field2);
     }
+
+    /* Remove number spinners (arrows) */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"]{ -moz-appearance: textfield; appearance: textfield; }
 
     .actions{
       margin-top: 14px;
@@ -133,10 +150,9 @@
       padding: 12px 14px;
       border-radius: 14px;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 750;
       cursor:pointer;
       transition: .12s ease;
-      flex: 1;
       min-width: 160px;
     }
     button:hover{ transform: translateY(-1px); }
@@ -148,6 +164,12 @@
       font-weight: 650;
     }
 
+    .btn-now{
+      border: 1px solid rgba(90, 255, 190, .35);
+      background: linear-gradient(180deg, rgba(90, 255, 190, .18), rgba(90, 255, 190, .10));
+      font-weight: 750;
+    }
+
     .out{
       margin-top: 14px;
       padding: 14px;
@@ -157,15 +179,8 @@
       display:none;
     }
 
-    .outTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
     .outTitle{
-      font-weight: 800;
+      font-weight: 850;
       font-size: 16px;
       margin: 0;
     }
@@ -188,7 +203,12 @@
       padding: 10px 12px;
     }
     .band .k{ color: var(--muted); font-size: 12px; }
-    .band .v{ font-size: 18px; font-weight: 850; margin-top: 4px; }
+    .band .v{ font-size: 18px; font-weight: 900; margin-top: 4px; }
+
+    .band.primary{
+      border-color: rgba(125, 170, 255, .50);
+      background: linear-gradient(180deg, rgba(125, 170, 255, .16), rgba(255,255,255,.03));
+    }
 
     .math{
       margin-top: 12px;
@@ -201,17 +221,16 @@
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <div>
-          <h1>3-Anchor Sales Estimator</h1>
-          <div class="sub">
-            <span class="pill">🍍 Pineapple 18oz</span>
-            <span class="pill">🍉 Watermelon 18oz</span>
-            <span class="pill">🫐 Mixed Fruit w/ Berries 20oz</span>
-          </div>
+        <h1>3-Anchor Sales Estimator</h1>
+        <div class="sub">
+          <span class="pill">🍍 Pineapple 18oz</span>
+          <span class="pill">🍉 Watermelon 18oz</span>
+          <span class="pill">🫐 Mixed Fruit w/ Berries 20oz</span>
         </div>
       </header>
 
@@ -235,7 +254,7 @@
             <option value="0.45">2:00 PM (45% complete)</option>
             <option value="0.55">3:00 PM (55% complete)</option>
             <option value="0.65">4:00 PM (65% complete)</option>
-            <option value="0.75" selected>5:00 PM (75% complete)</option>
+            <option value="0.75">5:00 PM (75% complete)</option>
             <option value="0.85">6:00 PM (85% complete)</option>
             <option value="0.92">7:00 PM (92% complete)</option>
             <option value="1.00">10:00 PM+ (Final / 100%)</option>
@@ -246,31 +265,27 @@
       <div class="grid3">
         <div>
           <label for="p">Pineapple 18oz (P)</label>
-          <input id="p" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 24" />
+          <input id="p" type="number" min="0" step="1" inputmode="numeric" />
         </div>
         <div>
           <label for="w">Watermelon 18oz (W)</label>
-          <input id="w" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 13" />
+          <input id="w" type="number" min="0" step="1" inputmode="numeric" />
         </div>
         <div>
           <label for="m">Mixed Fruit w/ Berries 20oz (M)</label>
-          <input id="m" type="number" min="0" step="1" inputmode="numeric" placeholder="e.g., 7" />
+          <input id="m" type="number" min="0" step="1" inputmode="numeric" />
         </div>
       </div>
 
       <div class="actions">
         <button id="calc">Calculate</button>
+        <button class="btn-now" id="now" type="button">Now</button>
         <button class="btn-secondary" id="reset" type="button">Reset</button>
       </div>
 
       <div class="out" id="out">
-        <div class="outTop">
-          <div>
-            <div class="outTitle">Estimated End-of-Day Sales</div>
-            <div class="outHint" id="hint"></div>
-          </div>
-        </div>
-
+        <div class="outTitle">Estimated End-of-Day Sales</div>
+        <div class="outHint" id="hint"></div>
         <div class="bands" id="bands"></div>
         <div class="math" id="math"></div>
       </div>
@@ -279,6 +294,7 @@
 
 <script>
   function roundDollar(x){ return Math.round(x); }
+  function fmtMoney(n){ return "$" + roundDollar(n).toLocaleString(); }
 
   function ratesFor(day){
     if(day === "weekday") return { p:45, w:80 };
@@ -293,8 +309,13 @@
     return { ratio, adj: 1.08 };
   }
 
-  function fmtMoney(n){
-    return "$" + roundDollar(n).toLocaleString();
+  // Prevent mouse wheel from changing number inputs while scrolling
+  function disableWheelOnNumberInputs(){
+    document.querySelectorAll('input[type="number"]').forEach(inp => {
+      inp.addEventListener('wheel', (e) => {
+        if(document.activeElement === inp) e.preventDefault();
+      }, { passive:false });
+    });
   }
 
   function calculate(){
@@ -317,20 +338,17 @@
     const low  = normalEOD * 0.92;
     const high = normalEOD * 1.08;
 
-    const bands = document.getElementById("bands");
-    bands.innerHTML = `
+    document.getElementById("bands").innerHTML = `
       <div class="band"><div class="k">Low</div><div class="v">${fmtMoney(low)}</div></div>
-      <div class="band"><div class="k">Normal</div><div class="v">${fmtMoney(normalEOD)}</div></div>
+      <div class="band primary"><div class="k">Normal</div><div class="v">${fmtMoney(normalEOD)}</div></div>
       <div class="band"><div class="k">High</div><div class="v">${fmtMoney(high)}</div></div>
     `;
 
-    const hint = document.getElementById("hint");
-    hint.textContent = isFinal
+    document.getElementById("hint").textContent = isFinal
       ? `Final mode (no completion divide). Mix ratio ${(mix.ratio).toFixed(2)} → adj ×${mix.adj}`
       : `Completion ${(completion*100).toFixed(0)}% | Mix ratio ${(mix.ratio).toFixed(2)} → adj ×${mix.adj}`;
 
-    const math = document.getElementById("math");
-    math.textContent =
+    document.getElementById("math").textContent =
 `Base = (P×${rates.p}) + (W×${rates.w})
      = (${P}×${rates.p}) + (${W}×${rates.w})
      = ${roundDollar(base)}
@@ -349,6 +367,42 @@ Band = Low ×0.92 | High ×1.08`;
     document.getElementById("out").style.display = "block";
   }
 
+  // Set timeSlot to the closest checkpoint based on current local time
+  function setNow(){
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const mins = h*60 + m;
+
+    // If 10pm or later → final
+    if(mins >= 22*60){
+      document.getElementById("timeSlot").value = "1.00";
+      return;
+    }
+
+    // Map checkpoints (minutes since midnight)
+    const checkpoints = [
+      { t: 10*60, v: "0.20" },
+      { t: 11*60, v: "0.25" },
+      { t: 12*60, v: "0.30" },
+      { t: 13*60, v: "0.35" },
+      { t: 14*60, v: "0.45" },
+      { t: 15*60, v: "0.55" },
+      { t: 16*60, v: "0.65" },
+      { t: 17*60, v: "0.75" },
+      { t: 18*60, v: "0.85" },
+      { t: 19*60, v: "0.92" }
+    ];
+
+    // Pick the closest checkpoint that is <= current time.
+    let chosen = checkpoints[0].v;
+    for(const c of checkpoints){
+      if(mins >= c.t) chosen = c.v;
+      else break;
+    }
+    document.getElementById("timeSlot").value = chosen;
+  }
+
   function resetAll(){
     document.getElementById("p").value = "";
     document.getElementById("w").value = "";
@@ -358,6 +412,9 @@ Band = Low ×0.92 | High ×1.08`;
 
   document.getElementById("calc").addEventListener("click", calculate);
   document.getElementById("reset").addEventListener("click", resetAll);
+  document.getElementById("now").addEventListener("click", setNow);
+
+  disableWheelOnNumberInputs();
 </script>
 </body>
 </html>
